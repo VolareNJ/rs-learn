@@ -71,7 +71,7 @@ fn return_ref()
 #[test]
 fn struct_incl_ref()
 {
-    struct S
+    struct S<'a>
     {
         r: &'a i32
     }
@@ -85,5 +85,38 @@ fn struct_incl_ref()
         // 再将匿名变量赋值给s。但s的生命周期大于匿名变量，矛盾
     }
 
-    // assert_eq!(*s.r, 10); /err
+    // assert_eq!(*s.r, 10); //err
+}
+
+/*
+struct S<'a>
+{
+    x: &'a i32,
+    y: &'a i32
+}
+*/
+
+struct S<'a, 'b>
+{
+    x: &'a i32,
+    y: &'b i32
+}
+
+#[test]
+fn test_multi_lifecycle()
+{
+    let x = 10;
+    let r;
+    {
+        let y = 20;
+        {
+            // let s = S {&x, &y};
+            let s = S { x:&x, y:&y }; //x和y必须显式标出
+            r = s.x; //等式右边的生命周期一定要大于等于左边
+                     //x的生命周期大于等于r，满足。但是y生命周期小于r，那么这个结构体跟随谁的生命周期？
+                     //因为x和y拥有相同的生命周期'a。解决方法是改类定义，让他们具有不同的生命周期
+                     //因此可以发现，'a只是定义的一个生命周期别名，不是any的意思
+        }
+    }
+    println!("{}",r);
 }
