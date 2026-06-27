@@ -95,3 +95,12 @@ fn test_loop()
     };
     assert_eq!(ret, "b break");
 }
+
+#[test]
+fn test_turbofish()
+{
+    //let ramp = (0 .. 10).collect<Vec<i32>>(); //err
+    let ramp = (0 .. 10).collect::<Vec::<i32>>();
+}
+
+
