@@ -76,3 +76,14 @@ fn test_broom()
     assert_eq!(hokey1.height, 30);
     assert_eq!(hokey2.health, 100);
 }
+
+struct Bounds(pub usize,pub usize);
+
+#[test]
+fn test_tuple_struct()
+{
+    let image_bounds = Bounds(1024,768);
+    assert_eq!(image_bounds.0 * image_bounds.1, 786432);
+}
+
+
